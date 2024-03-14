@@ -4,10 +4,10 @@ FROM centos:7
 # Install Java
 RUN yum install -y java
 
-# Create directories for Tomcat and SSL (-p - creates more than 1 directory)
+# Create directories for Tomcat and SSL (-p - +1 directory)
 RUN mkdir -p /opt/tomcat/ssl
 
-# Copy CA (Certificate Authority)
+# Copy CA´s
 COPY ca-public.pem /opt/tomcat/ssl/ca-public.pem
 COPY ca-private.pem /opt/tomcat/ssl/ca-private.pem
 
@@ -16,13 +16,13 @@ ADD https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.99/bin/apache-tomcat-8.5.99.ta
 RUN tar -xzf apache-tomcat-8.5.99.tar.gz
 RUN mv apache-tomcat-8.5.99/* /opt/tomcat/.
 
-# Generate SSL Certificate (UNCOMMENT IN ORDER TO GENERATE SSL CERTIFICATE)
+# Generate SSL Certificate
 RUN keytool -genkeypair -alias tomcat -keyalg RSA -keysize 2048 \
     -keystore /opt/tomcat/ssl/keystore.jks -storepass changeit \
     -dname "CN=localhost, OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown" \
     -validity 3650
 
-# Configure Tomcat to Use SSL (UNCOMMENT IN ORDER TO CONFIGURE TOMCAT TO USE SSL)
+# Configure Tomcat to Use SSL
 RUN sed -i 's/<Connector port="8080"/<Connector port="4041" scheme="https" secure="true" \
     SSLEnabled="true" keystoreFile="\/opt\/tomcat\/ssl\/keystore.jks" \
     keystorePass="changeit" /' /opt/tomcat/conf/server.xml
