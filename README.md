@@ -1,4 +1,4 @@
-1 - Navigate to the directory containing the Dockerfile.
+1 - Navigate to the directory containing the Dockerfile.\
 2 - Build the Docker image using the following command:
 ```
 docker build -t webapp .
